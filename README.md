@@ -1,4 +1,4 @@
-# Information Extraction from Breast Cancer Pathology Reports
+# HCSBC: Hierarchical Classification System for Breast Cancer Specimen Report
 
 <!-- TOC --> 
 
