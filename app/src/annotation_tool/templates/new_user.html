@@ -1,0 +1,13 @@
+
+
+Enter Username:
+<input type="text" id="username" placeholder="Username...">
+<br />
+<button type="button" onclick="create_user()">Submit</button>
+
+<script>
+    function create_user() {
+        var inputVal = document.getElementById("username").value;
+        window.location.href = "/new_user/"+inputVal;
+    }
+</script>

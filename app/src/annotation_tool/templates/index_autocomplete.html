@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .choice-btn {
+            margin-left: 0.5em;
+            margin-top: 0.5em;
+        }
+        #class-selector-container {
+            width: 100%;
+            text-align: center;
+        }
+        .level {
+            width: 80%;
+            margin-left: 10%;
+            border-top: 1px solid gray;
+            margin-top: 3em;
+        }
+        td{
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        tr {
+            border-bottom: 1px solid gray;
+        }
+        select {
+            border: none;
+        }
+        #report-container {
+            margin-left: 5%;
+            width: 90%;
+            text-align: center;
+            min-height: 10em;
+            border: 2px solid black;
+        }
+        * { box-sizing: border-box; }
+        body {
+          font: 16px Arial;
+        }
+        .autocomplete {
+          /*the container must be positioned relative:*/
+          position: relative;
+          display: inline-block;
+        }
+        input {
+          border: 1px solid transparent;
+          background-color: #f1f1f1;
+          padding: 10px;
+          font-size: 16px;
+        }
+        input[type=text] {
+          background-color: #f1f1f1;
+          width: 100%;
+        }
+        input[type=submit] {
+          background-color: DodgerBlue;
+          color: #fff;
+        }
+        .autocomplete-items {
+          position: absolute;
+          border: 1px solid #d4d4d4;
+          border-bottom: none;
+          border-top: none;
+          z-index: 99;
+          /*position the autocomplete items to be the same width as the container:*/
+          top: 100%;
+          left: 0;
+          right: 0;
+        }
+        .autocomplete-items div {
+          padding: 10px;
+          cursor: pointer;
+          background-color: #fff;
+          border-bottom: 1px solid #d4d4d4;
+        }
+        .autocomplete-items div:hover {
+          /*when hovering an item:*/
+          background-color: #e9e9e9;
+        }
+        .autocomplete-active {
+          /*when navigating through the items using the arrow keys:*/
+          background-color: DodgerBlue !important;
+          color: #ffffff;
+        }
+        </style>
+    </head>
+<body>
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>
+        var current_annotation = JSON.parse("{{start_annotation}}".replace(/&#39;/g,'"'));
+        var leaf_annotations_string = '{{leaves}}'.replace(/&#39;/g,'"');
+        var json_string = '{{json_structure}}'.replace(/&#39;/g,'"');
+        var leaf_grouped_string = '{{leaves_grouped}}'.replace(/&#39;/g,'"');
+        var json = JSON.parse(json_string);
+        var leaf_annotations = JSON.parse(leaf_annotations_string);
+        var leaves = Object.keys(leaf_annotations);
+        var leaves_grouped = JSON.parse(leaf_grouped_string);
+        console.log(leaves_grouped)
+        var chosen_remove_elem = "";
+        var special_categories = {'IDC/ILC Grade': ['Grade I', "Grade II", "Grade III"], "DCIS Grade": ["Low","Intermediate","High"]};
+ 
+        function check_special_rules(adding_value){
+            var Grades = ['Grade I', 'Grade II', 'Grade III'];
+            var Dcis = ['Low', 'Intermediate', 'High'];
+
+            current_annotation = current_annotation.filter(function(item) {
+                if(item.includes("NEGATIVE")){
+                    pull_elem_graphic(item);
+                    return 0;
+                }
+                return 1;
+            });
+
+            current_annotation = current_annotation.filter(function(item) {
+                if(item.includes("BADREPORT")){
+                    pull_elem_graphic(item);
+                    return 0;
+                }
+                return 1;
+            });
+
+            if(Grades.includes(adding_value)){
+                    current_annotation = current_annotation.filter(function(item) {
+                        if(Grades.includes(item)){
+                            $("#" + make_id(item)).removeClass("btn-primary").addClass("btn-dark");
+                            pull_elem_graphic(item);
+                            return 0;
+                        }
+                        return 1;
+                    });
+            }
+
+            if(Dcis.includes(adding_value)){
+                    current_annotation = current_annotation.filter(function(item) {
+                        if(Dcis.includes(item)){
+                            $("#" + make_id(item)).removeClass("btn-primary").addClass("btn-dark");
+                            pull_elem_graphic(item);
+                            return 0;
+                        }
+                        return 1;
+                    });
+            }
+
+                }
+
+        function make_id(s){
+            return s.replace(/\W/g,'_');
+        }
+
+        function get_vals(current_json){
+            var vals = [];
+            for(var key in current_json){
+                var obj = {};
+                obj.title = key;
+                obj.desc = current_json[key][0];
+                if(current_json[key][1].count > 0){
+                    obj.next = current_json[key][1];
+                }
+                vals.push(obj);
+            }
+            return vals;
+        }
+
+        function remove(){
+            if(current_annotation.length == 0){
+                return;
+            }
+            current_annotation = current_annotation.filter(item => item !== chosen_remove_elem);
+
+            pull_elem_graphic(chosen_remove_elem);
+            $("#removeBtn").toggle(false);
+
+            $("#" + make_id(chosen_remove_elem)).removeClass("btn-primary").addClass("btn-dark");
+            update_buttons();
+
+        }
+
+        function update_buttons(){
+            for(var keyish in current_annotation){
+                var val = current_annotation[keyish];
+                $("#" + make_id(val)).removeClass("btn-dark").addClass("btn-primary");
+            }
+        }
+
+        function push_elem_graphic(element){
+            $("#current_vals").append(`<option value="${element}">
+                                       ${element}
+                                  </option>`);
+            $("#current_vals").attr("size",(current_annotation.length >= 2) ? current_annotation.length : 2);
+        }
+
+        function pull_elem_graphic(element){
+            $(`#current_vals option[value='${element}']`).remove();
+        }
+
+        function update(element){
+            if(current_annotation.includes(element)){
+                current_annotation = current_annotation.filter(item => item !== element);
+                pull_elem_graphic(element);
+                $("#" + make_id(element)).removeClass("btn-primary").addClass("btn-dark");
+                update_buttons();
+            }
+            else{
+                add(element);
+            }
+        }
+
+        function add(element){
+            if(current_annotation.includes(element))
+                return;
+            check_special_rules(element);
+            current_annotation.push(element);
+            push_elem_graphic(element);
+            update_buttons();
+            $("#myInput").val('')
+
+        }
+
+        function save(){
+            if (current_annotation.length == 0) {
+                alert('Need at least one annotation!');
+                return;
+            }
+            console.log(current_annotation);
+            window.location.href = "/pathology/submit/{{identifier}}/"+current_annotation.join('-').replace(/ /g,'&');
+        }
+
+        function negative(){
+        window.location.href = "/pathology/submit/{{identifier}}/NEGATIVE";
+        }
+        function bad_report(x){
+            if(x == 0){
+        window.location.href = "/pathology/submit/{{identifier}}/BADREPORTILLEGIBLE";
+    }
+        else if(x == 1){
+    window.location.href = "/pathology/submit/{{identifier}}/BADREPORTNONBREAST";
+}
+        }
+        function logout(){
+        window.location.href = "/logout";
+        }
+
+        function qc(){
+            window.location.href = "/change_qc/{{identifier}}";
+        }
+
+        function previous(){
+            window.location.href = "/pathology/previous/{{identifier}}";
+        }
+
+        function next(){
+            window.location.href = "/pathology/next/{{identifier}}";
+        }
+
+        </script>
+        <script>
+            function autocomplete(inp, arr) {
+              /*the autocomplete function takes two arguments,
+              the text field element and an array of possible autocompleted values:*/
+              var currentFocus;
+              /*execute a function when someone writes in the text field:*/
+              inp.addEventListener("input", function(e) {
+                  var a, b, i, val = this.value;
+                  /*close any already open lists of autocompleted values*/
+                  closeAllLists();
+                  if (!val) { return false;}
+                  currentFocus = -1;
+                  /*create a DIV element that will contain the items (values):*/
+                  a = document.createElement("DIV");
+                  a.setAttribute("id", this.id + "autocomplete-list");
+                  a.setAttribute("class", "autocomplete-items");
+                  /*append the DIV element as a child of the autocomplete container:*/
+                  this.parentNode.appendChild(a);
+                  /*for each item in the array...*/
+                  for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                      /*create a DIV element for each matching element:*/
+                      b = document.createElement("DIV");
+                      /*make the matching letters bold:*/
+                      b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                      b.innerHTML += arr[i].substr(val.length);
+                      /*insert a input field that will hold the current array item's value:*/
+                      b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                      /*execute a function when someone clicks on the item value (DIV element):*/
+                          b.addEventListener("click", function(e) {
+                          /*insert the value for the autocomplete text field:*/
+                          inp.value = this.getElementsByTagName("input")[0].value;
+                          /*close the list of autocompleted values,
+                          (or any other open lists of autocompleted values:*/
+                          closeAllLists();
+                      });
+                      a.appendChild(b);
+                    }
+                  }
+              });
+              /*execute a function presses a key on the keyboard:*/
+              inp.addEventListener("keydown", function(e) {
+                  var x = document.getElementById(this.id + "autocomplete-list");
+                  if (x) x = x.getElementsByTagName("div");
+                  if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                  } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                  } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                      /*and simulate a click on the "active" item:*/
+                      if (x) x[currentFocus].click();
+                    }
+                  }
+              });
+              function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+              }
+              function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                  x[i].classList.remove("autocomplete-active");
+                }
+              }
+              function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                  if (elmnt != x[i] && elmnt != inp) {
+                  x[i].parentNode.removeChild(x[i]);
+                }
+              }
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+            }
+        </script>
+
+<div style="position: fixed; margin-top: 0; left: 0; right: 0; background-color: #212F3C; color: white; max-height: 5%; z-index: 1000;">
+        <button type="button" id="nextBtn" class="btn btn-secondary" style="float: right; margin-right: 4%;margin-top: 5px;" onclick="next()">Next</button>
+        <button type="button" id="prevBtn" class="btn btn-secondary" style="float: right; margin-right: 10px;margin-top: 5px;" onclick="previous()">Previous</button>
+            <button type="button" id="doneBtn" class="btn btn-success" style="float: right; margin-right: 4%;margin-top: 5px;" onclick="save()">Save</button>
+            <button type="button" id="nextBtn" class="btn btn-danger" style="float: right; margin-right: 4%;margin-top: 5px;" onclick="negative()">Negative</button>
+            <div class="dropdown">
+              <button class="btn btn-danger dropdown-toggle" type="button" style="float: right; margin-right: 1%;margin-top: 5px;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Bad Report
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" onclick="bad_report(0)">Illegible</a>
+                <a class="dropdown-item" onclick="bad_report(1)">Non-Breast</a>
+              </div>
+            </div>
+            <button type="button" id="nextBtn" class="btn btn-warning" style="float: right; margin-right: 2%;margin-top: 5px;" onclick="logout()">Logout</button>
+            {% if user.qc %}
+            <button type="button" id="qcBtn" class="btn btn-info" style="float: right; margin-right: 2%;margin-top: 5px;" onclick="qc()">QC: ON</button>
+            {% else %}
+            <button type="button" id="qcBtn" class="btn btn-info" style="float: right; margin-right: 2%;margin-top: 5px;" onclick="qc()">QC: OFF</button>
+            {% endif %}
+
+
+            <button type="button" id="goBtn" class="btn btn-success" style="float: right; margin-right: 3%;margin-top: 5px;" onclick="jump()">GO</button>
+            <input type="text" class="textfield" value="" id="jumpInput" onkeypress="return isNumber(event)" style="float: right; margin-right: 3px; margin-top: 5px; width: 5%;" />
+            <p style="float: right; margin-right: 1%; margin-top: 10px;"> Jump to report: </p>
+<h2>{{user.email}} - Report {{identifier_index}}</h2>
+</div>
+<br />
+<div id="report-container" style="margin-top: 5%;">
+    <b>Original Document ID:</b> {{report_id}}
+    <br />
+    <b>Part Designator:</b> {{part_designator}}
+    <br />
+    <b>Part Text:</b>
+    <br />
+    {{part_text}}
+</div>
+<br />
+    <h3 style="width: 30%; margin-right: 20px; float: right">Current Annotations</h3>
+    <br />
+<div id="class-selector-container">
+    <table style="width: 100%;">
+        <tr style="border: none;">
+            <td>
+    <form autocomplete="off" id="inputForm">
+  <div class="autocomplete" style="width:30%; float: left; margin-left: 20px;">
+    <input id="myInput" autofocus type="text" name="myCountry" placeholder="Type..." onkeypress="return checkEnter(event)">
+  </div>
+  <input type="submit" style="float: left;" value="Add Annotation">
+  <select id="current_vals" size=2 style="width: 30%; float: right; margin-left: 10%; margin-right: 20px;">
+</select>
+<br />
+</form>
+</td>
+</tr>
+<tr style="border: none;">
+    <td>
+        <div id="actionItems">
+                <button type="button" id="removeBtn" class="btn btn-danger" onclick="remove()" style="float: right; margin-right: 10%;">Remove</button>
+        </div>
+
+    </td>
+</tr>
+</table>
+
+    </div>
+<table id="extraSelectors" style="width: 80%; margin-left: 10%; margin-top: 50px;">
+</table>
+  <script>
+  function containsObject(obj, list) {
+    var x;
+    for (x in list) {
+        if (list.hasOwnProperty(x) && list[x] === obj) {
+            return true;
+        }
+    }
+
+    return false;
+}
+      $(document).ready(function () {
+          start_vals = get_vals(json);
+      });
+      document.onload = function() {
+  document.getElementById("myInput").focus();
+}
+      autocomplete(document.getElementById("myInput"), leaves);
+
+      forced_order = ["Group 1", "IDC/ILC Grade", "DCIS Grade", "Group 2", "Group 3", "Group 4", "Others"];
+
+      if(!forced_order){
+      for(var key in special_categories){
+          var attach_string = `<tr><td>${key}</td><td>`;
+          for(var keyish in special_categories[key]){
+              let value = special_categories[key][keyish];
+              let val_fixed = make_id(value);
+              attach_string += `<button type="button" class="btn btn-dark choice-btn" id="${val_fixed}" data-toggle="tooltip" data-placement="top" onclick="update('${value}')">${value}</button>`;
+          }
+
+          $("#extraSelectors").append(attach_string + `</td></tr>`);
+      }
+
+      for(var key in leaves_grouped){
+          var attach_string = `<tr><td>${key}</td><td>`;
+          for(var keyish in leaves_grouped[key]){
+              let value = leaves_grouped[key][keyish];
+              let val_fixed = make_id(value);
+              attach_string += `<button type="button" class="btn btn-dark choice-btn" id="${val_fixed}" data-toggle="tooltip" data-placement="top" onclick="update('${value}')">${value}</button>`;
+          }
+
+          $("#extraSelectors").append(attach_string + `</td></tr>`);
+      }
+  }
+  else{
+      for(var i = 0; i < forced_order.length; i++){
+          key = forced_order[i];
+          var attach_string = `<tr><td>${key}</td><td>`;
+          console.log(Object.keys(special_categories));
+          keys = (containsObject(key, Object.keys(special_categories))) ? special_categories[key] : leaves_grouped[key];
+          console.log(keys);
+          for(var keyish in keys){
+              let value = keys[keyish];
+              let val_fixed = make_id(value);
+              attach_string += `<button type="button" class="btn btn-dark choice-btn" id="${val_fixed}" data-toggle="tooltip" data-placement="top" onclick="update('${value}')">${value}</button>`;
+          }
+
+          $("#extraSelectors").append(attach_string + `</td></tr>`);
+      }
+  }
+      function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
+function jump(){
+    let jumper = $("#jumpInput").val()
+    let jump_index = Number(jumper)
+    if(Number.isNaN(jump_index) || jump_index < 0 || jump_index >= {{total_count}}){
+        alert('Please enter a valid report number!');
+         $("#jumpInput").val("");
+        return;
+    }
+    window.location.href = `/pathology/number/${jump_index}`
+}
+  </script>
+  <script>
+  $('#inputForm #myInput').keydown(function (e) {
+    if (e.keyCode == 13) {
+        $('#inputForm').submit();
+    }
+});
+
+  function submit_form_func(){
+  add($("#myInput").val());
+  console.log(current_annotation);
+
+  }
+  function checkEnter(e) {
+    //See notes about 'which' and 'key'
+    if (event.which == 13 || event.keyCode == 13) {
+        //code to execute here
+        submit_form_func();
+    }
+}
+      $("#removeBtn").toggle(false);
+      $("form").on('submit', function (e) {
+          //ajax call here
+          submit_form_func();
+          //stop form submission
+          e.preventDefault();
+      });
+      $('#current_vals').change(function() {
+          if($(this).val() === ''){
+              $("#removeBtn").toggle(false);
+          }
+          else{
+              $("#removeBtn").toggle(true);
+          }
+
+          chosen_remove_elem = $(this).val();
+      });
+      for(var key in current_annotation){
+          push_elem_graphic(current_annotation[key]);
+      }
+      update_buttons();
+  </script>
+</body>
+</html>

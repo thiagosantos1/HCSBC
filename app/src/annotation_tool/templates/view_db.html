@@ -1,0 +1,16 @@
+<html>
+  <body>
+    <h1>View current annotations</h1>
+    <h1>Annotations</h1>
+    <table>
+        <th><td>IDENTIFIER</td><td>ANNOTATION</td><td>USER</td></th>
+    {% for annotation in annotations %}
+      <tr><td></td>
+          <td>{{annotation.identifier}}</td>
+          <td>{{annotation.annotation}}</td>
+          <td>{{annotation.user}}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </body>
+</html>

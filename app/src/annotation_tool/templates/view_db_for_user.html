@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <h1>View annotations (Users)</h1>
+    <h1>Annotations</h1>
+    <table>
+        <th><td>Record</td>
+            {% for user in users %}
+            <td>{{user}}</td>
+            {% endfor %}
+        </th>
+    {% for record in records %}
+      <tr><td></td>
+          <td>{{loop.index0}}</td>
+          {% for user in record %}
+          {% if user == 1 %}
+          <td>x</td>
+          {% else %}
+          <td></td>
+          {% endif %}
+          {% endfor %}
+      </tr>
+    {% endfor %}
+    </table>
+  </body>
+</html>

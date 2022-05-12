@@ -1,0 +1,75 @@
+{
+"Group 1": ["Malignant - can get from synoptic reports", {
+    "Invasive ductal carcinoma (IDC)": ["", {
+        "IDC: Invasive ductal carcinoma": ["",{}],
+    "DCIS: Ductal Carcinoma in Situ": ["",{}],
+     "ILC: Invasive Lobular Carcinoma": ["Almost always ER+/PR+/HER2-",{}],
+        "Tubular carcinoma": ["",{}],
+        "Medullary carcinoma": ["",{}],
+        "Mucinous carcinoma": ["",{}],
+        "Pagets": ["",{}],
+        "Metaplastic carcinoma": ["",{}],
+        "NEW LABEL": ["",{}],
+        "Apocrine carcinoma": ["",{}],
+        "Intraductal Papillary Carcinoma": ["",{}],
+        "Intracystic Papillary carcinoma": ["",{}]
+        }]
+
+    }],
+"Group 2": ["Intermediate risk, still gets excised", {
+    "ADH: Atypical Ductal Hyperplasia": ["", {
+        "ADH: Atypical Ductal Hyperplasia": ["",{}],
+        "Hyperplasia with atypia": ["",{}],
+        "Columnar cell change WITH atypia": ["",{}],
+        "FEA: Flat epithelial atypia": ["",{}],
+        "Intraductal papilloma": ["Slightly less risk of being upgraded to malignant but considered a risk factor so it is excised.",{}],
+        "Atypical Phyllodes": ["Excised with wide margins and then followed; underdiagnosed and under-excised, may have demographic/race prevalence",{}],
+        "Phyllodes": ["Excised with wide margins and then followed; underdiagnosed and under-excised, may have demographic/race prevalence",{}],
+        "Atypical Papilloma": ["",{}]
+    }]
+}],
+"Group 3": ["Overall risk is unclear for these entities; management is driven by the clinician and patient", {
+    "Mucocele": ["Some may excise and some may watch",{}],
+    "Radial scar": ["Some may excise and some may watch",{}],
+    "Microscopic Papilloma": ["",{}],
+    "LCIS: Lobular carcinoma in situ": ["Not treated as malignant - more as risk factor",{}]
+    }],
+"Group 4": ["Do not intervene", {
+    "ALH: Atypical lobular hyperplasia": ["",{}],
+    "Cyst": ["",{}],
+    "Apocrine metaplasia": ["",{}],
+    "Biopsy site changes": ["",{}],
+    "Columnar cell change WITHOUT atypia": ["",{}],
+    "Fat Necrosis": ["",{}],
+    "Fibroadenoma": ["",{}],
+    "Excisional or Post-surgical change": ["",{}],
+    "Fibrosis":["",{}],
+    "Fibrocystic disease": ["",{}],
+    "Fibroadenomatoid": ["",{}],
+    "PASH: Pseudoangiomatous stromal hyperplasia": ["",{}],
+    "Sclerosing adenosis": ["",{}],
+    "Seroma": ["",{}],
+    "UDH: Usual ductal hyperplasia": ["",{}]
+    }],
+"Others": ["", {
+    "Non-Breast Metastasis": ["",{}],
+    "Lymphoma": ["",{}],
+    "Lymph Node - Benign": ["",{}],
+    "Lymph Node - Metastatic": ["",{}],
+    "Lactational Change": ["",{}],
+    "FNA - Malignant": ["",{}],
+    "FNA - Benign": ["",{}],
+    "Granular cell tumor": ["",{}],
+    "Mesenchymal tumors": ["", {
+        "Benign": ["", {
+            "Fibromatoses":["",{}],
+            "Myofibroblastoma":["",{}],
+            "Hamartoma":["",{}],
+            "Myxoma":["",{}],
+            "Hemangioma":["",{}]
+            }],
+            "Malignant (sarcomas)": ["",{}]
+        }],
+    "Uncertain": ["",{}]
+    }]
+}

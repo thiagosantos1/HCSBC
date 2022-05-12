@@ -1,0 +1,11 @@
+flask
+flask_sqlalchemy
+pandas
+wtforms
+flask_login
+numpy
+turtle
+flask_wtf
+flask_login
+xlrd
+six

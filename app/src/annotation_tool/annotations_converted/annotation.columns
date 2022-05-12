@@ -1,0 +1,5 @@
+"name","type","length","leftDigits","rightDigits"
+"id","INTEGER","4","4","0"
+"identifier","STRING","21","0","0"
+"annotation","STRING","317","0","0"
+"user","STRING","7","0","0"

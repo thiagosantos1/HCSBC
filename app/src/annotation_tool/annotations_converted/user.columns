@@ -1,0 +1,5 @@
+"name","type","length","leftDigits","rightDigits"
+"email","STRING","8","0","0"
+"password","STRING","14","0","0"
+"authenticated","INTEGER","1","1","0"
+"qc","INTEGER","1","1","0"
