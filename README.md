@@ -12,7 +12,6 @@
     - [Extract Using Terminal](#extract-using-terminal)
     - [Annotation Tool](#annotation-tool)
     - [Contributors](#contributors)
-    - [References](#references)
 
 <!-- /TOC -->
 
