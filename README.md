@@ -27,16 +27,16 @@ We developed a web system application for users to test our proposed pipilne for
 
 <table border=1>
 <tr align='center' > 
-<td><img src="https://github.com/thiagosantos1/BreastPathologyClassificationSystem/blob/master/app/imgs/app_1.png" width="500"                  title="HCS App"></td>         
-<td><img src="https://github.com/thiagosantos1/BreastPathologyClassificationSystem/blob/master/app/imgs/app_2.png" width="500" title="HCS App"></td>
+<td><img src="https://github.com/thiagosantos1/HCSBC/blob/master/app/imgs/app_1.png" width="500"                  title="HCS App"></td>         
+<td><img src="https://github.com/thiagosantos1/HCSBC/blob/master/app/imgs/app_2.png" width="500" title="HCS App"></td>
 </tr>
 </table>
 
 ## Model and Project Design
 <table border=1>
 <tr align='center' > 
-<td><img src="https://github.com/thiagosantos1/BreastPathologyClassificationSystem/blob/master/app/imgs/pipeline.png" width="500"                  title="HCS App"></td>         
-<td><img src="https://github.com/thiagosantos1/BreastPathologyClassificationSystem/blob/master/app/imgs/hybrid_system.png" width="400" title="HCS App"></td>
+<td><img src="https://github.com/thiagosantos1/HCSBC/blob/master/app/imgs/pipeline.png" width="500"                  title="HCS App"></td>         
+<td><img src="https://github.com/thiagosantos1/HCSBC/blob/master/app/imgs/hybrid_system.png" width="400" title="HCS App"></td>
 </tr>
 </table>
 
@@ -112,7 +112,7 @@ A minimal demo app is provided for you to play with the classification model!
 
 <table border=1>
 <tr align='center' > 
-<td><img src="https://github.com/thiagosantos1/BreastPathologyClassificationSystem/blob/master/app/imgs/app_1.png" width="500"                  title="HCS App"></td>         
+<td><img src="https://github.com/thiagosantos1/HCSBC/blob/master/app/imgs/app_1.png" width="500"                  title="HCS App"></td>         
 </table>
 
 You can easily run your app in your default browser by running:
@@ -154,13 +154,13 @@ Coming soon
 
 ## Annotation Tool 
 
-[A minimal annotation tool is provided](https://github.com/thiagosantos1/BreastPathologyClassificationSystem/tree/master/app/src/annotation_tool)
+[A minimal annotation tool is provided](https://github.com/thiagosantos1/HCSBC/tree/master/app/src/annotation_tool)
 
 
-![Alt text](https://github.com/thiagosantos1/BreastPathologyClassificationSystem/blob/master/app/imgs/annotation_tool.png?raw=true "Title")
+![Alt text](https://github.com/thiagosantos1/HCSBC/blob/master/app/imgs/annotation_tool.png?raw=true "Title")
 
 
-Annotation Tool Repository : [GitHub Link](https://github.com/thiagosantos1/BreastPathologyClassificationSystem/tree/master/app/src/annotation_tool)
+Annotation Tool Repository : [GitHub Link](https://github.com/thiagosantos1/HCSBC/tree/master/app/src/annotation_tool)
 
 
 ## Contributors
