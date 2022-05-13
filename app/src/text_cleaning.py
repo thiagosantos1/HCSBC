@@ -68,42 +68,23 @@ def remove_noise_text(txt):
   txt = re.sub("image series", '', txt)
   txt = re.sub("series", '', txt)
 
-  txt = re.sub(" mm | mm|mm ", " ", txt)
+
+  txt = re.sub("post_treatment", 'post treatment', txt)
+  txt = re.sub("post-treatment", 'post treatment', txt)
+
+  txt = re.sub("nonmasslike", 'non mass like', txt)
+  txt = re.sub("non_mass_like", 'non mass like', txt) 
+  txt = re.sub("non-mass-like", 'non mass like', txt)
+  txt = re.sub("statuspost", 'status post', txt)
+
   txt = re.sub(" series | series|series ", "", txt)
-  txt = re.sub(" cm | cm|cm ", " ", txt)
-  txt = re.sub(" cc | cc|cc ", " ", txt)
-  txt = re.sub(" ct | ct|ct ", " ", txt)
-  txt = re.sub(" mri | mri|mri ", " ", txt)
-  txt = re.sub(" see | see|see ", " ", txt)
-  txt = re.sub(" iia | iia|iia ", " ", txt)
-  txt = re.sub("comment", "", txt)
-
-
-  txt = re.sub("post treatment", '', txt)
-  txt = re.sub("post_treatment", '', txt)
-  txt = re.sub("post-treatment", '', txt)
-  txt = re.sub("findings suggest", '', txt)
-  txt = re.sub("findings", '', txt)
-  txt = re.sub("suggest", '', txt)
-  txt = re.sub("study reviewed", '', txt)
-  txt = re.sub("study", '', txt)
-  txt = re.sub("reviewed", '', txt)
-  txt = re.sub("please see", '', txt)
-  txt = re.sub("please", '', txt)
-  
-  txt = re.sub("skull base", '', txt)
-  txt = re.sub("fdg avid", '', txt)
-  txt = re.sub("fdg aivity", '', txt)
-  txt = re.sub("please see chest ct for further evaluation of known lung mass", '', txt)
-  
-  txt = re.sub("status_post", '', txt)
-  txt = re.sub("status post|clock|/|'/'", '', txt)
-  txt = re.sub("statuspost|:", '', txt)
   txt = re.sub(" cm | cm|cm ", " centimeters ", txt)
   txt = re.sub(" cc | cc|cc ", " cubic centimeters ", txt)
   txt = re.sub(" ct | ct|ct ", " carat metric ", txt)
   txt = re.sub(" mm | mm|mm ", " millimeters ", txt)
-  #txt = re.sub("(\\d*\\.\\d+)|(\\d+\\.[0-9 ]+)","",txt)
+
+  txt = re.sub("please see chest ct for further evaluation of known lung mass", '', txt)
+  
 
   # in the worst case, just replace the name from PI to empty string
   txt = re.sub("dr\\.\\s[^\\s]+", '', txt)

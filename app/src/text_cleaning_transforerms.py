@@ -65,11 +65,6 @@ def remove_noise_text(txt):
   txt = re.sub("transspatial extension:", ' ', txt)
   txt = re.sub("thyroid bed:", ' ', txt)
   txt = re.sub("additional findings:", ' ', txt)
-  txt = re.sub("series_image", ' ', txt) 
-  txt = re.sub("series image", ' ', txt)
-  txt = re.sub("image series", ' ', txt)
-  txt = re.sub("see synoptic report", ' ', txt)
-  txt = re.sub("see report", ' ', txt)
   
   txt = re.sub("brstwo|brstmarun|brstwln|brlump|lnbx", ' ', txt)
   
